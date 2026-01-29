@@ -3,13 +3,15 @@ from typing import Optional, Dict, Any
 from jose import JWTError, jwt
 import os
 from dotenv import load_dotenv
+from uuid import uuid4
 
 load_dotenv()
 
 # JWT Configuration
 SECRET_KEY = os.getenv("JWT_SECRET_KEY", "B8HHhdZ7xDeqM3fGFSD7Oude0cjuF4NrxV2F6fmfKxM")
 ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
-ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("JWT_EXPIRATION_MINUTES", "43200"))  # 30 days default
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("JWT_EXPIRATION_MINUTES", "1440"))
+REFRESH_TOKEN_EXPIRE_DAYS = int(os.getenv("REFRESH_TOKEN_EXPIRE_DAYS", "30"))
 
 
 def create_access_token(data: Dict[str, Any], expires_delta: Optional[timedelta] = None) -> str:
@@ -30,7 +32,12 @@ def create_access_token(data: Dict[str, Any], expires_delta: Optional[timedelta]
     else:
         expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     
-    to_encode.update({"exp": expire})
+    to_encode.update({
+        "exp": expire,
+        "iat": datetime.utcnow(),
+        "type": "access"
+    })
+
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     
     return encoded_jwt
@@ -69,3 +76,34 @@ def get_user_from_token(token: str) -> Optional[int]:
     
     user_id: Optional[int] = payload.get("sub")
     return user_id
+
+def create_refresh_token(data: Dict[str, Any], expires_delta: Optional[timedelta] = None) -> str:
+    """
+    Create a JWT refresh token.
+    
+    Args:
+        data: Dictionary containing user data to encode in token
+        expires_delta: Optional custom expiration time
+        
+    Returns:
+        Encoded JWT token string
+    """
+    to_encode = data.copy()
+    
+    expire = datetime.utcnow() + (
+        expires_delta or timedelta(days=REFRESH_TOKEN_EXPIRE_DAYS)
+    )
+
+    to_encode.update({
+        "exp": expire,
+        "iat": datetime.utcnow(),
+        "jti": str(uuid4()),
+        "type": "refresh"
+    })
+
+    encoded_jwt = jwt.encode(
+        to_encode,
+        SECRET_KEY,
+        algorithm=ALGORITHM
+    )
+    return encoded_jwt

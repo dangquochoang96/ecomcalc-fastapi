@@ -5,7 +5,7 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    DATABASE_URL: str = "mysql+mysqlconnector://root:@localhost/fastapi_app"
+    DATABASE_URL: str = "mysql+mysqlconnector://root:hoang123@localhost/ecomcalc_api"
     
     class Config:
         env_file = ".env"

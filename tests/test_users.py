@@ -10,7 +10,7 @@ def test_create_user():
         "email": "test@example.com",
         "phone": "0123456789",
         "full_name": "Test User",
-        "password": "TestPassword123!"
+        "password": "hoang123!"
     }
     response = client.post("/api/users/", json=user_data)
     assert response.status_code == 201
