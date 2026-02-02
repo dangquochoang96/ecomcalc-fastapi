@@ -30,11 +30,12 @@ class UserUpdate(BaseModel):
 class UserPlatform(BaseModel):
     """Schema for user platform"""
 
-    id: int
+    id: Optional[int] = None
     platform_id: int
     category_id: Optional[int] = None
     shop_name: Optional[str] = None
     shop_id: Optional[str] = None
+    tax_profile: Optional[int] = None
     is_default: Optional[bool] = True
 
 
@@ -46,6 +47,7 @@ class UserPlatformResponse(UserPlatform):
     platform_id: int
     category_id: Optional[int] = None
     shop_name: Optional[str] = None
+    tax_profile: Optional[int] = None
 
     class Config:
         from_attributes = True

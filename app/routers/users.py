@@ -20,6 +20,16 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
     return UserService.create_user(db, user)
 
 
+@router.post("/platform", response_model=UserPlatformResponse)
+def create_user_platform(
+    user_platform: UserPlatform,
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_user),
+):
+    """Create a new user platform"""
+    return UserService.create_user_platform(db, user_platform, user_id=current_user.id)
+
+
 @router.get("/", response_model=List[UserResponse])
 def get_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     """Get all users with pagination"""

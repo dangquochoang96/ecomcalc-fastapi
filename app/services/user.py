@@ -49,10 +49,16 @@ class UserService:
 
     @staticmethod
     def create_user_platform(
-        db: Session, user_platform: UserPlatform
+        db: Session, user_platform: UserPlatform, user_id: int
     ) -> UserPlatformResponse:
         """Create a new user platform"""
+        if user_platform.is_default:
+            db.query(UserPlatformModel).filter(
+                UserPlatformModel.user_id == user_id
+            ).update({"is_default": False})
+
         db_user_platform = UserPlatformModel(
+            user_id=user_id,
             platform_id=user_platform.platform_id,
             category_id=user_platform.category_id,
             shop_name=user_platform.shop_name,
@@ -121,6 +127,13 @@ class UserService:
 
         # Update fields
         update_data = user_platform_update.model_dump(exclude_unset=True)
+
+        if update_data.get("is_default"):
+            db.query(UserPlatformModel).filter(
+                UserPlatformModel.user_id == user_id,
+                UserPlatformModel.id != db_platform.id,
+            ).update({"is_default": False})
+
         for field, value in update_data.items():
             setattr(db_platform, field, value)
 

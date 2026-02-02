@@ -41,6 +41,11 @@ class PlatformResponse(PlatformBase):
         from_attributes = True
 
 
+class ApiPlatformResponse(BaseModel):
+    success: bool
+    data: List[PlatformResponse]
+
+
 class ApiResponse(BaseModel):
     success: bool
     data: List[PlatformFeeResponse]
