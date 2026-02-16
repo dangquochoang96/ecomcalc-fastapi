@@ -1,7 +1,10 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import users, auth, categories, platform_fees
-from app.database import engine
+
+from app.database import Base, engine
+from app.routers import auth, categories, platform_fees, users
 
 # Initialize FastAPI with JWT security scheme
 app = FastAPI(
@@ -29,13 +32,14 @@ app.include_router(
 )
 
 
-@app.on_event("startup")
-def startup_event():
-    """Create database tables on startup"""
-    # Import all models to register them with SQLAlchemy
-    from app.database import Base
-
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # 🔹 Startup
     Base.metadata.create_all(bind=engine)
+    print("Database tables created")
+    yield
+    # 🔹 Shutdown (nếu cần)
+    print("App shutdown")
 
 
 @app.get("/")
