@@ -6,10 +6,15 @@ import os
 
 
 class Settings(BaseSettings):
+<<<<<<< HEAD
     DATABASE_URL: str = os.getenv(
         "DATABASE_URL", "mysql+mysqlconnector://root:hoang123@localhost/ecomcalc_api"
     )
 
+=======
+    DATABASE_URL: str = "mysql+mysqlconnector://cp030657_dev:Hoang123*@118.27.202.139:3306/cp030657_ecomcalc"
+    
+>>>>>>> 27c96d4 (update moi truong)
     class Config:
         env_file = ".env"
         extra = "ignore"  # Allow extra fields in .env that aren't defined here
