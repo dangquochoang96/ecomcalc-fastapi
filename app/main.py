@@ -4,11 +4,11 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.database import Base, engine
-from app.routers import auth, categories, platform_fees, users
+from app.routers import auth, calculations, categories, platform_fees, users
 
 # Initialize FastAPI with JWT security scheme
 app = FastAPI(
-    title="FastAPI Application",
+    title="EcomCalc API",
     description="A well-structured FastAPI application",
     version="1.0.0",
     swagger_ui_parameters={"docExpansion": "expanded"},
@@ -29,6 +29,9 @@ app.include_router(users.router, prefix="/api/users", tags=["users"])
 app.include_router(categories.router, prefix="/api/categories", tags=["categories"])
 app.include_router(
     platform_fees.router, prefix="/api/platform-fees", tags=["platform-fees"]
+)
+app.include_router(
+    calculations.router, prefix="/api/calculations", tags=["calculations"]
 )
 
 

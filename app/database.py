@@ -2,13 +2,10 @@ from pydantic_settings import BaseSettings
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-import os
 
 
 class Settings(BaseSettings):
-    DATABASE_URL: str = os.getenv(
-        "DATABASE_URL", "mysql+mysqlconnector://root:hoang123@localhost/ecomcalc_api"
-    )
+    DATABASE_URL: str = "mysql+mysqlconnector://cp030657_dev:Hoang123*@118.27.202.139:3306/cp030657_ecomcalc"
 
     class Config:
         env_file = ".env"
