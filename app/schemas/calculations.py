@@ -12,10 +12,9 @@ class CalculationProductCreate(BaseModel):
 
 class FeeConfigCreate(BaseModel):
     fee_id: int
-    fee_name: str
-    fee_type: str
-    is_applied: bool = True
     custom_value: Optional[Decimal] = Field(default=None, ge=0)
+    min_value: Optional[Decimal] = Field(default=None, ge=0)
+    max_value: Optional[Decimal] = Field(default=None, ge=0)
 
 
 class CalculationCreateRequest(BaseModel):
@@ -52,11 +51,12 @@ class CalculationPlatformResponse(BaseModel):
 
 
 class FeeAppliedResponse(BaseModel):
+    fee_id: int
     fee_name: str
-    fee_type: str
-    is_applied: bool
+    fee_type: int
     custom_value: Optional[Decimal] = None
-    note: Optional[str] = None
+    min_value: Optional[Decimal] = None
+    max_value: Optional[Decimal] = None
 
 
 class CalculationInfoResponse(BaseModel):
