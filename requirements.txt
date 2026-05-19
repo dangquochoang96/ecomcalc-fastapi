@@ -13,3 +13,5 @@ sqlalchemy
 mysql-connector-python
 python-dotenv
 redis
+pypdf
+pdfplumber

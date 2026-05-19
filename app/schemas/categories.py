@@ -59,3 +59,13 @@ class ApiResponse(BaseModel):
     success: bool
     data: List[CategoryResponse]
     message: Optional[str] = None
+
+
+class CategoryFeeImportResponse(BaseModel):
+    success: bool
+    message: str
+    platform_id: int
+    platform_fee_id: int
+    shop_type: int
+    categories_created: int
+    fees_created: int
